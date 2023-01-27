@@ -1054,6 +1054,7 @@ void Util::PlotPdfWithComponents(RooWorkspace* w, FitConfig* fc, TString anaName
 
             canVec[iVec]->SaveAs("results/"+anaName+"/"+canName+".pdf");
             canVec[iVec]->SaveAs("results/"+anaName+"/"+canName+".eps");
+            canVec[iVec]->SaveAs("results/"+anaName+"/"+canName+".png");
 
         }
     }
@@ -1896,7 +1897,8 @@ void Util::ATLASLabel(Double_t x,Double_t y,const char* text,Color_t color)
 
     double delx = 0.115*696*gPad->GetWh()/(472*gPad->GetWw());
 
-    l.DrawLatex(x,y,"ATLAS");
+    //l.DrawLatex(x,y,"ATLAS");
+    l.DrawLatex(x,y,"T2K");
     if (text) {
         TLatex p; 
         p.SetNDC();

@@ -73,6 +73,12 @@ class Sample(object):
         self.systList = []
         ## Internal list of weights
         self.weights = []
+        self.weights_fgd1_fhc = []
+        self.weights_fgd1_rhc = []
+        self.weights_fgd2_fhc = []
+        self.weights_fgd2_rhc = []
+        self.weights_p0d_fhc = []
+        self.weights_p0d_rhc = []
         ## Internal list of sample-specific weights
         self.tempWeights = []
         ## Internal dictionary of systematics
@@ -86,6 +92,12 @@ class Sample(object):
         self.cutsDict = {}
         ## List of input files
         self.files = []
+        self.files_fgd1_fhc = []
+        self.files_fgd1_rhc = []
+        self.files_fgd2_fhc = []
+        self.files_fgd2_rhc = []
+        self.files_p0d_fhc = []
+        self.files_p0d_rhc = []
         ## Name of input tree
         self.treeName = ""
         ## Nominal cross-section weight for signal samples
@@ -763,6 +775,54 @@ class Sample(object):
         @param filelist A list of filenames
         """
         self.files = filelist
+
+    def setFileList_fgd1_fhc(self, filelist):
+        """
+        Set file list for this Sample directly
+
+        @param filelist A list of filenames
+        """
+        self.files_fgd1_fhc = filelist
+
+    def setFileList_fgd1_rhc(self, filelist):
+        """
+        Set file list for this Sample directly
+
+        @param filelist A list of filenames
+        """
+        self.files_fgd1_rhc = filelist
+
+    def setFileList_fgd2_fhc(self, filelist):
+        """
+        Set file list for this Sample directly
+
+        @param filelist A list of filenames
+        """
+        self.files_fgd2_fhc = filelist
+
+    def setFileList_fgd2_rhc(self, filelist):
+        """
+        Set file list for this Sample directly
+
+        @param filelist A list of filenames
+        """
+        self.files_fgd2_rhc = filelist
+
+    def setFileList_p0d_fhc(self, filelist):
+        """
+        Set file list for this Sample directly
+
+        @param filelist A list of filenames
+        """
+        self.files_p0d_fhc = filelist
+
+    def setFileList_p0d_rhc(self, filelist):
+        """
+        Set file list for this Sample directly
+
+        @param filelist A list of filenames
+        """
+        self.files_p0d_rhc = filelist
 
     def setFile(self, file):
         """

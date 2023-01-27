@@ -1128,19 +1128,42 @@ class ConfigManager(object):
         """
         if not sam.isData and not sam.isQCD and not sam.isDiscovery:
             self.prepare.weights = str(self.lumiUnits*self.outputLumi/self.inputLumi)
-            self.prepare.weights += " * " + " * ".join(sam.weights)
+            #self.prepare.weights += " * " + " * ".join(sam.weights)
             if (self.readFromTree and not sam.isDiscovery) or self.useCacheToTreeFallback:
                     treeName = sam.treeName
                     if treeName == '': 
                         treeName = sam.name+self.nomName
-                    self.prepare.read(treeName, sam.files)
+                    if "FGD1_FHC" in chan.channelName:
+                       self.prepare.weights += " * " + " * ".join(sam.weights_fgd1_fhc)
+                       self.prepare.read(treeName, sam.files_fgd1_fhc)
+                    elif "FGD2_FHC" in chan.channelName:
+                       self.prepare.weights += " * " + " * ".join(sam.weights_fgd2_fhc)
+                       self.prepare.read(treeName, sam.files_fgd2_fhc)
+                    elif "FGD1_RHC" in chan.channelName:
+                       self.prepare.weights += " * " + " * ".join(sam.weights_fgd1_rhc)
+                       self.prepare.read(treeName, sam.files_fgd1_rhc)
+                    elif "FGD2_RHC" in chan.channelName:
+                       self.prepare.weights += " * " + " * ".join(sam.weights_fgd2_rhc)
+                       self.prepare.read(treeName, sam.files_fgd2_rhc)
+                    else:
+                       self.prepare.weights += " * " + " * ".join(sam.weights)
+                       self.prepare.read(treeName, sam.files)
         else:
             self.prepare.weights = "1."
             if self.readFromTree or self.useCacheToTreeFallback:
                 treeName = sam.treeName
                 if treeName == '': 
                     treeName = sam.name
-                self.prepare.read(treeName, sam.files)
+                if "FGD1_FHC" in chan.channelName:
+                    self.prepare.read(treeName, sam.files_fgd1_fhc)
+                elif "FGD2_FHC" in chan.channelName:
+                    self.prepare.read(treeName, sam.files_fgd2_fhc)
+                elif "FGD1_RHC" in chan.channelName:
+                    self.prepare.read(treeName, sam.files_fgd1_rhc)
+                elif "FGD2_RHC" in chan.channelName:
+                    self.prepare.read(treeName, sam.files_fgd2_rhc)
+                else:
+                    self.prepare.read(treeName, sam.files)
 
         if len(sam.cutsDict.keys()) == 0:
             if not chan.variableName == "cuts":
@@ -1298,9 +1321,9 @@ class ConfigManager(object):
 
                 self.addHistoSysforNoQCD(regionString, normString, normCuts, fitConfig, chan, sam, syst)
 
-        elif sam.isQCD:	
-            #Add Histos for Sample-type QCD
-            self.addHistoSysForQCD(regionString,normString,normCuts,chan,sam)
+#SI        elif sam.isQCD:	
+#SI            #Add Histos for Sample-type QCD
+#SI            self.addHistoSysForQCD(regionString,normString,normCuts,chan,sam)
         return
 
     

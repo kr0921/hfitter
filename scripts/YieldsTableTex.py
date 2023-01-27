@@ -276,7 +276,7 @@ def tableend(signalregion='3+ jets, loose',suffix='sr3jl'):
   end = '''%%
 }
 \\end{center}
-\\caption{Signal region: %s. Fit results for the electron (top part) and muon (bottom part) channels, for an integrated luminosity of $1035$\,\ipb.
+\\caption{Signal region: %s. Fit results for the electron (top part) and muon (bottom part) channels, for an integrated luminosity of $1035$ipb.
 The results are obtained from the control regions using the discovery fit (see text for details). The fit results of the loose-not-tight regions are not shown.
 Nominal MC expectations (normalised to MC cross-sections) are given for comparison. 
 The Monte Carlo QCD estimates are provided for illustrational purposes only, and are not used in the fit.
@@ -301,7 +301,7 @@ def tableend2(signalregion='3+ jets, loose',suffix='sr3jl'):
   end = '''%%
 }
 \\end{center}
-\\caption{Signal region: %s. Fit results for an integrated luminosity of $1035$\,\ipb.
+\\caption{Signal region: %s. Fit results for an integrated luminosity of $1035$ipb.
 The results are obtained from the control regions using the discovery fit (see text for details). 
 Nominal MC expectations (normalised to MC cross-sections) are given for comparison. 
 The Monte Carlo QCD estimates are provided for illustrational purposes only, and are not used in the fit.
@@ -328,7 +328,7 @@ def tableend3(suffix='sr3jl'):
   end = '''%%
 }
 \\end{center}
-\caption{ Background fit results for the S3 (top part) and S4 (bottom part) signal regions, for an integrated luminosity of $20.5$~\\ifb.
+\caption{ Background fit results for the S3 (top part) and S4 (bottom part) signal regions, for an integrated luminosity of $20.5$~ifb.
 %%The results are obtained from the control regions using the discovery fit (see text for details). The fit results of the loose-not-tight regions are not shown.
 Nominal MC expectations (normalised to MC cross-sections) are given for comparison. 
 %%The Monte Carlo QCD estimates are provided for illustrational purposes only, and are not used in the fit.

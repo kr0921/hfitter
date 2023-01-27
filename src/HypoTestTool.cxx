@@ -100,7 +100,7 @@ RooStats::HypoTestTool::HypoTestTool() : m_hc(0), m_calc(0),
     mMinimizerType("Minuit2"),
     mResultFileName(),
     mNoSystematics(false),
-    mConfLevel(0.95),
+    mConfLevel(0.90/*0.95*/),
     m_logger("HypoTestTool")
 {
 }

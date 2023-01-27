@@ -27,6 +27,7 @@
 #include "TString.h"
 
 #include "FitConfig.h"
+#include "FitUtils.hxx"
 
 //Root/RooFit/RooStats includes
 #include "RooStats/HypoTestInverterResult.h"
@@ -81,6 +82,9 @@ class ConfigMgr {
         FitConfig* getFitConfig(const TString& name);
 
         TString makeCorrectedBkgModelConfig(RooWorkspace* w, const char* modelSBName="ModelConfig");
+
+        /// Get POT from file
+        Float_t GetPOT(std::string file, bool dumpPOT = false){return FitUtils::GetPOT(file, dumpPOT);}
 
         //get/set methods
         void setNToys (const int& val) { m_nToys = val; }
