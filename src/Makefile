@@ -14,7 +14,7 @@ LD_LIBRARY_PATH:=.:../lib:$(ROOTSYS)/lib:$(LD_LIBRARY_PATH)
 OBJDIR=obj
 DEPDIR=$(OBJDIR)/dep
 VPATH= $(OBJDIR)
-INCLUDES += -I../include -I$(ROOTSYS)/include -I../../psycheCore_3.45/inc 
+INCLUDES += -I../include -I$(ROOTSYS)/include -I../../psycheCore_3.50/inc 
 ROOTSYS  ?= ERROR_RootSysIsNotDefined
 
 CINTFLAGS = 

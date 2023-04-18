@@ -78,3 +78,10 @@ export SVNPHYS="svn+ssh://svn.cern.ch/reps/atlasphys"
 # Hack for ssh from mac 
 export LC_ALL=C 
 
+#highland
+source ../numuCCAnalysis_2.22/Linux-CentOS_7-gcc_4.8-x86_64/setup.sh
+
+
+
+
+
