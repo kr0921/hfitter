@@ -30,7 +30,6 @@
 #     SysTable.py -s nuEleElastic,otherBG -c SR1_FGD1_FHC -w results/MyLdmConfigExample/SPlusB_combined_NormalMeasurement_model_afterFit.root -o tmp.tex
 #     SysTable.py -s nuEleElastic,otherBG -c SR1_FGD1_FHC -w results/MyLdmConfigExample/SPlusB_combined_NormalMeasurement_model_afterFit.root -b -o tmp.tex
 #     SysTable.py  -c SR1_FGD1_FHC,SR1_FGD2_FHC,SR1_FGD1_RHC,SR1_FGD2_RHC -w results/MyLdmConfigExample/SPlusB_combined_NormalMeasurement_model_afterFit.root -b -o tmp.tex
-#     SysTable.py  -c SR1_FGD1_FHC,SR1_FGD1_RHC,SR1_FGD2_FHC,SR1_FGD2_RHC -w results/LDM2FGD_ana0.09/SPlusB_combined_NormalMeasurement_model_afterFit.root -b -o tmp.tex
 
 ################################################################
 ## In principle all you have to setup is defined in this file ##
@@ -64,17 +63,6 @@ def nPOT(list_of_files):
         print(ffile,fpot)
     return pot
 
-def addSystematic(FitConfig,chname,sname,syst_name,ldmMv="0"):
-    RelError = configMgr.cppMgr.Get_LDM_selection_DetSyst(chname,sname,syst_name,float(ldmMv))
-    #print(chname,sname,syst_name,RelError)
-    #raw_input("Press Enter to continue.")
-    if sname == "LDM020":
-        #syst = Systematic(syst_name, configMgr.weights, 1.+RelError,1.-RelError, "user","shapeSys")
-        syst = Systematic(syst_name, configMgr.weights, 1.+RelError,1.-RelError, "user","overallNormSys")
-    else:
-        #syst = Systematic(syst_name, configMgr.weights, 1.+RelError,1.-RelError, "user","userOverallSys")
-        syst = Systematic(syst_name, configMgr.weights, 1.+RelError,1.-RelError, "user","overallNormSys")
-    FitConfig.getChannelByName(chname).getSample(sname).addSystematic(syst)
 
 
 #---------------------------------------------------------------------------------------------
@@ -88,15 +76,12 @@ def addSystematic(FitConfig,chname,sname,syst_name,ldmMv="0"):
 #---------------------------------------
 useStat=True #True
 doValidation=False #use or use not validation regions to check exptrapolation to signal regions
-detSyst=True # detector syst
-fluxSyst=True # flux syst
 
 #-------------------------------
 # Parameters for hypothesis test
 #-------------------------------
 #configMgr.doHypoTest=False
-#configMgr.scanRange = (0.001, 0.009)
-configMgr.nTOYs=100
+#configMgr.nTOYs=1000
 configMgr.calculatorType=2 #2   # 2=asymptotic calculator, 0=frequentist calculator
 configMgr.testStatType=3     # 3=one-sided profile likelihood test statistic (LHC default)
 configMgr.nPoints=20
@@ -106,7 +91,7 @@ configMgr.nPoints=20
 #--------------------------------
 # Now we start to build the model
 #--------------------------------
-ldmMv = "0.09" #configMgr.userArg
+ldmMv = configMgr.userArg
 # First define HistFactory attributes
 configMgr.analysisName = "LDM2FGD_ana"+ldmMv
 
@@ -138,6 +123,23 @@ rhc_fgd2_sig_files = []
 rhc_fgd2_mc_files = []
 rhc_fgd2_genie_files = []
 rhc_fgd2_data_files = []
+
+fhc_p0d_w_sig_files = []
+fhc_p0d_w_mc_files = []
+fhc_p0d_w_genie_files = []
+fhc_p0d_w_data_files = []
+fhc_p0d_a_sig_files = []
+fhc_p0d_a_mc_files = []
+fhc_p0d_a_genie_files = []
+fhc_p0d_a_data_files = []
+rhc_p0d_w_sig_files = []
+rhc_p0d_w_mc_files = []
+rhc_p0d_w_genie_files = []
+rhc_p0d_w_data_files = []
+rhc_p0d_a_sig_files = []
+rhc_p0d_a_mc_files = []
+rhc_p0d_a_genie_files = []
+rhc_p0d_a_data_files = []
 if configMgr.readFromTree:
     #FHC
     fhc_fgd1_mc_files.append("samples/ldm_ntuples/neut_fhc_run2air_p6T_fgd1.root")
@@ -164,7 +166,7 @@ if configMgr.readFromTree:
     fhc_fgd1_data_files.append("samples/ldm_ntuples/data_run4a_water_p6T_rdp_fhc_fgd1.root")
     fhc_fgd1_data_files.append("samples/ldm_ntuples/data_run8a_air_p6V_rdp_fhc_fgd1.root")
     fhc_fgd1_data_files.append("samples/ldm_ntuples/data_run8a_water_p6V_rdp_fhc_fgd1.root")
-    
+
     fhc_fgd1_sig_files.append("samples/ldm_ntuples/fgd1_pi0_decay_prerun7geom.root")
     fhc_fgd1_sig_files.append("samples/ldm_ntuples/fgd1_eta_decay_prerun7geom.root")
 
@@ -193,7 +195,7 @@ if configMgr.readFromTree:
     fhc_fgd2_data_files.append("samples/ldm_ntuples/data_run4a_water_p6T_rdp_fhc_fgd2.root")
     fhc_fgd2_data_files.append("samples/ldm_ntuples/data_run8a_air_p6V_rdp_fhc_fgd2.root")
     fhc_fgd2_data_files.append("samples/ldm_ntuples/data_run8a_water_p6V_rdp_fhc_fgd2.root")
-    
+
     fhc_fgd2_sig_files.append("samples/ldm_ntuples/fgd2_pi0_decay_prerun7geom.root")
     fhc_fgd2_sig_files.append("samples/ldm_ntuples/fgd2_eta_decay_prerun7geom.root")
 
@@ -202,7 +204,7 @@ if configMgr.readFromTree:
     rhc_fgd1_mc_files.append("samples/ldm_ntuples/neut_rhc_run6air_p6T_fgd1.root")
     rhc_fgd1_mc_files.append("samples/ldm_ntuples/neut_rhc_run7water_p6T_fgd1.root")
     rhc_fgd1_mc_files.append("samples/ldm_ntuples/neut_rhc_run9water_p6T_fgd1.root")
-    
+
     rhc_fgd1_genie_files.append("samples/ldm_ntuples/production006_B_mcp_anti-genie_2010-11-air_magnet_run6_anal_fgd1.root")
     rhc_fgd1_genie_files.append("samples/ldm_ntuples/production006_B_mcp_anti-genie_2010-11-water_magnet_run5_anal_fgd1.root")
     rhc_fgd1_genie_files.append("samples/ldm_ntuples/production006_L_mcp_anti-genie_2015-08-water_magnet_run7_anal_fgd1.root")
@@ -216,7 +218,7 @@ if configMgr.readFromTree:
     rhc_fgd1_data_files.append("samples/ldm_ntuples/data_run9b_water_p6T_rdp_rhc_fgd1.root")
     rhc_fgd1_data_files.append("samples/ldm_ntuples/data_run9c_water_p6T_rdp_rhc_fgd1.root")
     rhc_fgd1_data_files.append("samples/ldm_ntuples/data_run9d_water_p6T_rdp_rhc_fgd1.root")
-    
+
     rhc_fgd1_sig_files.append("samples/ldm_ntuples/fgd1_pi0_decay_prerun7geom.root")
     rhc_fgd1_sig_files.append("samples/ldm_ntuples/fgd1_eta_decay_prerun7geom.root")
     #
@@ -224,7 +226,7 @@ if configMgr.readFromTree:
     rhc_fgd2_mc_files.append("samples/ldm_ntuples/neut_rhc_run6air_p6T_fgd2.root")
     rhc_fgd2_mc_files.append("samples/ldm_ntuples/neut_rhc_run7water_p6T_fgd2.root")
     rhc_fgd2_mc_files.append("samples/ldm_ntuples/neut_rhc_run9water_p6T_fgd2.root")
-    
+
     rhc_fgd2_genie_files.append("samples/ldm_ntuples/production006_B_mcp_anti-genie_2010-11-air_magnet_run6_anal_fgd2.root")
     rhc_fgd2_genie_files.append("samples/ldm_ntuples/production006_B_mcp_anti-genie_2010-11-water_magnet_run5_anal_fgd2.root")
     rhc_fgd2_genie_files.append("samples/ldm_ntuples/production006_L_mcp_anti-genie_2015-08-water_magnet_run7_anal_fgd2.root")
@@ -238,16 +240,65 @@ if configMgr.readFromTree:
     rhc_fgd2_data_files.append("samples/ldm_ntuples/data_run9b_water_p6T_rdp_rhc_fgd2.root")
     rhc_fgd2_data_files.append("samples/ldm_ntuples/data_run9c_water_p6T_rdp_rhc_fgd2.root")
     rhc_fgd2_data_files.append("samples/ldm_ntuples/data_run9d_water_p6T_rdp_rhc_fgd2.root")
-    
+
     rhc_fgd2_sig_files.append("samples/ldm_ntuples/fgd2_pi0_decay_prerun7geom.root")
     rhc_fgd2_sig_files.append("samples/ldm_ntuples/fgd2_eta_decay_prerun7geom.root")
+
+    #P0D
+    #FHC
+    fhc_p0d_w_mc_files.append("samples/p0d/B_genie_fhc_w.root")
+    fhc_p0d_w_mc_files.append("samples/p0d/L_genie_fhc_w_run8.root")
+
+    fhc_p0d_w_genie_files.append("samples/p0d/B_genie_fhc_w.root")
+    fhc_p0d_w_genie_files.append("samples/p0d/L_genie_fhc_w_run8.root")
+
+    fhc_p0d_w_data_files.append("samples/p0d/B_genie_fhc_w.root")
+    fhc_p0d_w_data_files.append("samples/p0d/L_genie_fhc_w_run8.root")
+
+    fhc_p0d_w_sig_files.append("samples/p0d/eta_waterin.root")
+    fhc_p0d_w_sig_files.append("samples/p0d/pi0_waterin.root")
+
+    #
+    fhc_p0d_a_mc_files.append("samples/p0d/B_genie_fhc_a.root")
+    fhc_p0d_a_mc_files.append("samples/p0d/L_genie_fhc_a_run8.root")
+
+    fhc_p0d_a_genie_files.append("samples/p0d/B_genie_fhc_a.root")
+    fhc_p0d_a_genie_files.append("samples/p0d/L_genie_fhc_a_run8.root")
+
+    fhc_p0d_a_data_files.append("samples/p0d/B_genie_fhc_a.root")
+    fhc_p0d_a_data_files.append("samples/p0d/L_genie_fhc_a_run8.root")
+
+    fhc_p0d_a_sig_files.append("samples/p0d/eta_waterout.root")
+    fhc_p0d_a_sig_files.append("samples/p0d/pi0_waterout.root")
+
+    #RHC
+    rhc_p0d_w_mc_files.append("samples/p0d/B_genie_rhc_w_run5.root")
+    rhc_p0d_w_mc_files.append("samples/p0d/L_genie_rhc_w_run7.root")
+
+    rhc_p0d_w_genie_files.append("samples/p0d/B_genie_rhc_w_run5.root")
+    rhc_p0d_w_genie_files.append("samples/p0d/L_genie_rhc_w_run7.root")
+
+    rhc_p0d_w_data_files.append("samples/p0d/B_genie_rhc_w_run5.root")
+    rhc_p0d_w_data_files.append("samples/p0d/L_genie_rhc_w_run7.root")
+
+    rhc_p0d_w_sig_files.append("samples/p0d/eta_waterin.root")
+    rhc_p0d_w_sig_files.append("samples/p0d/pi0_waterin.root")
+    #
+    rhc_p0d_a_mc_files.append("samples/p0d/B_genie_rhc_a_run6.root")
+
+    rhc_p0d_a_genie_files.append("samples/p0d/B_genie_rhc_a_run6.root")
+
+    rhc_p0d_a_data_files.append("samples/p0d/B_genie_rhc_a_run6.root")
+
+    rhc_p0d_a_sig_files.append("samples/p0d/eta_waterout.root")
+    rhc_p0d_a_sig_files.append("samples/p0d/pi0_waterout.root")
 
 #----------------------------------------------
 #Systematics
 #ucb = Systematic("ucb", configMgr.weights, 1.000001,0.999999, "user","userOverallSys")
 #ucs = Systematic("ucs", configMgr.weights, 1.000001,0.999999, "user","userOverallSys")
-#ucb = Systematic("ucb", configMgr.weights, 1.3,0.7, "user","userOverallSys")
-#ucs = Systematic("ucs", configMgr.weights, 1.3,0.7, "user","userOverallSys")
+ucb = Systematic("ucb", configMgr.weights, 1.1,0.9, "user","userOverallSys")
+ucs = Systematic("ucs", configMgr.weights, 1.1,0.9, "user","userOverallSys")
 
 #----------------------------------------------
 # List of samples and their plotting colours
@@ -255,19 +306,19 @@ topSample = Sample("nuEleElastic",kGreen-9)
 #topSample.setNormFactor("mu_Top",1.,0.,5.)
 topSample.setStatConfig(useStat)
 #topSample.setNormRegions([("SR1","selelec_mom"),("VR1","selelec_mom")])
-#topSample.addSystematic(ucb)
+topSample.addSystematic(ucb)
 #
 wzSample = Sample("ccnue",kAzure+1)
 #wzSample.setNormFactor("mu_WZ",1.,0.,5.)
 wzSample.setStatConfig(useStat)
 #wzSample.setNormRegions([("SR1","selelec_mom"),("VR1","selelec_mom")])
-#wzSample.addSystematic(ucb)
+wzSample.addSystematic(ucb)
 #
 bgSample = Sample("otherBG",kYellow-3)
 #bgSample.setNormFactor("mu_BG",1.,0.,5.)
 bgSample.setStatConfig(useStat)
 #bgSample.setNormRegions([("SR1","selelec_mom"),("VR1","selelec_mom")])
-#bgSample.addSystematic(ucb)
+bgSample.addSystematic(ucb)
 #
 dataSample = Sample("Data",kBlack)
 dataSample.setData()
@@ -278,12 +329,12 @@ if myFitType==FitType.Exclusion:
          sigSample = Sample(sig,kPink)
          #sigSample.setNormByTheory()
          sigSample.setStatConfig(useStat)
-         sigSample.setNormFactor("mu_SIG",1.e-7,1.e-8,1000000.)                    
-         #sigSample.addSystematic(ucs)
+         sigSample.setNormFactor("mu_SIG",1.e-7,1.e-8,1000000.)
+         sigSample.addSystematic(ucs)
 
 
 
-
+#FGD
 # Set the files to read from
 if configMgr.readFromTree:
     dataSample.setFileList_fgd1_fhc(fhc_fgd1_data_files)
@@ -294,6 +345,12 @@ if configMgr.readFromTree:
     pot_data_fgd2_fhc = nPOT(dataSample.files_fgd2_fhc)
     pot_data_fgd1_rhc = nPOT(dataSample.files_fgd1_rhc)
     pot_data_fgd2_rhc = nPOT(dataSample.files_fgd2_rhc)
+
+    pot_data_p0d_w_fhc = 3.71e20 #nPOT(dataSample.files_p0d_w_fhc)
+    pot_data_p0d_a_fhc = 7.89e20 #nPOT(dataSample.files_p0d_a_fhc)
+    pot_data_p0d_w_rhc = 5.19e20 #nPOT(dataSample.files_p0d_w_rhc)
+    pot_data_p0d_a_rhc = 3.43e20 #nPOT(dataSample.files_p0d_a_rhc)
+
     # set the file from which the samples should be taken
     for sam in [topSample, wzSample, bgSample]:
             if sam==topSample:
@@ -301,46 +358,79 @@ if configMgr.readFromTree:
                 sam.setFileList_fgd2_fhc(fhc_fgd2_genie_files)
                 sam.setFileList_fgd1_rhc(rhc_fgd1_genie_files)
                 sam.setFileList_fgd2_rhc(rhc_fgd2_genie_files)
+                sam.setFileList_p0d_w_fhc(fhc_p0d_w_genie_files)
+                sam.setFileList_p0d_a_fhc(fhc_p0d_a_genie_files)
+                sam.setFileList_p0d_w_rhc(rhc_p0d_w_genie_files)
+                sam.setFileList_p0d_a_rhc(rhc_p0d_a_genie_files)
             else:
                 sam.setFileList_fgd1_fhc(fhc_fgd1_mc_files)
                 sam.setFileList_fgd2_fhc(fhc_fgd2_mc_files)
                 sam.setFileList_fgd1_rhc(rhc_fgd1_mc_files)
                 sam.setFileList_fgd2_rhc(rhc_fgd2_mc_files)
+                sam.setFileList_p0d_w_fhc(fhc_p0d_w_mc_files)
+                sam.setFileList_p0d_a_fhc(fhc_p0d_a_mc_files)
+                sam.setFileList_p0d_w_rhc(rhc_p0d_w_mc_files)
+                sam.setFileList_p0d_a_rhc(rhc_p0d_a_mc_files)
             pot_fgd1_fhc = nPOT(sam.files_fgd1_fhc)
             pot_fgd2_fhc = nPOT(sam.files_fgd2_fhc)
             pot_fgd1_rhc = nPOT(sam.files_fgd1_rhc)
             pot_fgd2_rhc = nPOT(sam.files_fgd2_rhc)
+            pot_p0d_w_fhc = nPOT(sam.files_p0d_w_fhc)
+            pot_p0d_a_fhc = nPOT(sam.files_p0d_a_fhc)
+            pot_p0d_w_rhc = nPOT(sam.files_p0d_w_rhc)
+            pot_p0d_a_rhc = nPOT(sam.files_p0d_a_rhc)
             if sam==topSample:
                 sam.weights_fgd1_fhc = ("1","weight_corr_total",str(pot_data_fgd1_fhc/pot_fgd1_fhc),"(nuElectronElasticTopo==10)")
                 sam.weights_fgd2_fhc = ("1","weight_corr_total",str(pot_data_fgd2_fhc/pot_fgd2_fhc),"(fgd2nuElectronElasticTopo==10)")
                 sam.weights_fgd1_rhc = ("1","weight_corr_total",str(pot_data_fgd1_rhc/pot_fgd1_rhc),"(nuElectronElasticTopo==10)")
                 sam.weights_fgd2_rhc = ("1","weight_corr_total",str(pot_data_fgd2_rhc/pot_fgd2_rhc),"(fgd2nuElectronElasticTopo==10)")
+                sam.weights_p0d_w_fhc = ("1",str(pot_data_p0d_w_fhc/pot_p0d_w_fhc),"(p0dLDMNeutrinoTopo==10)")
+                sam.weights_p0d_a_fhc = ("1",str(pot_data_p0d_a_fhc/pot_p0d_a_fhc),"(p0dLDMNeutrinoTopo==10)")
+                sam.weights_p0d_w_rhc = ("1",str(pot_data_p0d_w_rhc/pot_p0d_w_rhc),"(p0dLDMNeutrinoTopo==10)")
+                sam.weights_p0d_a_rhc = ("1",str(pot_data_p0d_a_rhc/pot_p0d_a_rhc),"(p0dLDMNeutrinoTopo==10)")
             elif sam==wzSample:
-                sam.weights_fgd1_fhc = ("1","weight_corr_total",str(pot_data_fgd1_fhc/pot_fgd1_fhc),"(nuElectronElasticTopo==1)")            
-                sam.weights_fgd2_fhc = ("1","weight_corr_total",str(pot_data_fgd2_fhc/pot_fgd2_fhc),"(fgd2nuElectronElasticTopo==1)")            
-                sam.weights_fgd1_rhc = ("1","weight_corr_total",str(pot_data_fgd1_rhc/pot_fgd1_rhc),"(nuElectronElasticTopo==1)")            
-                sam.weights_fgd2_rhc = ("1","weight_corr_total",str(pot_data_fgd2_rhc/pot_fgd2_rhc),"(fgd2nuElectronElasticTopo==1)")            
+                sam.weights_fgd1_fhc = ("1","weight_corr_total",str(pot_data_fgd1_fhc/pot_fgd1_fhc),"(nuElectronElasticTopo==1)")
+                sam.weights_fgd2_fhc = ("1","weight_corr_total",str(pot_data_fgd2_fhc/pot_fgd2_fhc),"(fgd2nuElectronElasticTopo==1)")
+                sam.weights_fgd1_rhc = ("1","weight_corr_total",str(pot_data_fgd1_rhc/pot_fgd1_rhc),"(nuElectronElasticTopo==1)")
+                sam.weights_fgd2_rhc = ("1","weight_corr_total",str(pot_data_fgd2_rhc/pot_fgd2_rhc),"(fgd2nuElectronElasticTopo==1)")
+                sam.weights_p0d_w_fhc = ("1",str(pot_data_p0d_w_fhc/pot_p0d_w_fhc),"(p0dLDMNeutrinoTopo==1)")
+                sam.weights_p0d_a_fhc = ("1",str(pot_data_p0d_a_fhc/pot_p0d_a_fhc),"(p0dLDMNeutrinoTopo==1)")
+                sam.weights_p0d_w_rhc = ("1",str(pot_data_p0d_w_rhc/pot_p0d_w_rhc),"(p0dLDMNeutrinoTopo==1)")
+                sam.weights_p0d_a_rhc = ("1",str(pot_data_p0d_a_rhc/pot_p0d_a_rhc),"(p0dLDMNeutrinoTopo==1)")
             else:
-                sam.weights_fgd1_fhc = ("1","weight_corr_total",str(pot_data_fgd1_fhc/pot_fgd1_fhc),"!(nuElectronElasticTopo==10 || nuElectronElasticTopo==1)")            
-                sam.weights_fgd2_fhc = ("1","weight_corr_total",str(pot_data_fgd2_fhc/pot_fgd2_fhc),"!(fgd2nuElectronElasticTopo==10 || fgd2nuElectronElasticTopo==1)")            
-                sam.weights_fgd1_rhc = ("1","weight_corr_total",str(pot_data_fgd1_rhc/pot_fgd1_rhc),"!(nuElectronElasticTopo==10 || nuElectronElasticTopo==1)")            
-                sam.weights_fgd2_rhc = ("1","weight_corr_total",str(pot_data_fgd2_rhc/pot_fgd2_rhc),"!(fgd2nuElectronElasticTopo==10 || fgd2nuElectronElasticTopo==1)")            
+                sam.weights_fgd1_fhc = ("1","weight_corr_total",str(pot_data_fgd1_fhc/pot_fgd1_fhc),"!(nuElectronElasticTopo==10 || nuElectronElasticTopo==1)")
+                sam.weights_fgd2_fhc = ("1","weight_corr_total",str(pot_data_fgd2_fhc/pot_fgd2_fhc),"!(fgd2nuElectronElasticTopo==10 || fgd2nuElectronElasticTopo==1)")
+                sam.weights_fgd1_rhc = ("1","weight_corr_total",str(pot_data_fgd1_rhc/pot_fgd1_rhc),"!(nuElectronElasticTopo==10 || nuElectronElasticTopo==1)")
+                sam.weights_fgd2_rhc = ("1","weight_corr_total",str(pot_data_fgd2_rhc/pot_fgd2_rhc),"!(fgd2nuElectronElasticTopo==10 || fgd2nuElectronElasticTopo==1)")
+                sam.weights_p0d_w_fhc = ("1",str(pot_data_p0d_w_fhc/pot_p0d_w_fhc),"!(p0dLDMNeutrinoTopo==10 || p0dLDMNeutrinoTopo==1)")
+                sam.weights_p0d_a_fhc = ("1",str(pot_data_p0d_a_fhc/pot_p0d_a_fhc),"!(p0dLDMNeutrinoTopo==10 || p0dLDMNeutrinoTopo==1)")
+                sam.weights_p0d_w_rhc = ("1",str(pot_data_p0d_w_rhc/pot_p0d_w_rhc),"!(p0dLDMNeutrinoTopo==10 || p0dLDMNeutrinoTopo==1)")
+                sam.weights_p0d_a_rhc = ("1",str(pot_data_p0d_a_rhc/pot_p0d_a_rhc),"!(p0dLDMNeutrinoTopo==10 || p0dLDMNeutrinoTopo==1)")
             print(dataSample.name,pot_data_fgd1_fhc,pot_data_fgd2_fhc,pot_data_fgd1_rhc,pot_data_fgd2_rhc)
             print(sam.name,pot_fgd1_fhc,pot_fgd2_fhc,sam.name,pot_fgd1_rhc,pot_fgd2_rhc)
+            print(dataSample.name,pot_data_p0d_w_fhc,pot_data_p0d_a_fhc,pot_data_p0d_w_rhc,pot_data_p0d_a_rhc)
+            print(sam.name,pot_p0d_w_fhc,pot_p0d_a_fhc,sam.name,pot_p0d_w_rhc,pot_p0d_a_rhc)
             #raw_input("Press Enter to continue.")
-            
+
             if myFitType==FitType.Exclusion:
                 for sig in sigSamples:
                     sigSample.setFileList_fgd1_fhc(fhc_fgd1_sig_files)
                     sigSample.setFileList_fgd2_fhc(fhc_fgd2_sig_files)
                     sigSample.setFileList_fgd1_rhc(rhc_fgd1_sig_files)
                     sigSample.setFileList_fgd2_rhc(rhc_fgd2_sig_files)
+                    sigSample.setFileList_p0d_w_fhc(fhc_p0d_w_sig_files)
+                    sigSample.setFileList_p0d_a_fhc(fhc_p0d_a_sig_files)
+                    sigSample.setFileList_p0d_w_rhc(rhc_p0d_w_sig_files)
+                    sigSample.setFileList_p0d_a_rhc(rhc_p0d_a_sig_files)
                     mass_condition = "(ldm_Mv>0.999*"+ldmMv+" && ldm_Mv<1.001*"+ldmMv+")"
                     sigSample.weights_fgd1_fhc = ("1./3000.","weight_corr_total","ldm_expectedEvents",mass_condition,str(pot_data_fgd1_fhc/1.8e+21))
                     sigSample.weights_fgd2_fhc = ("1./3000.","weight_corr_total","ldm_expectedEvents",mass_condition,str(pot_data_fgd2_fhc/1.8e+21))
                     sigSample.weights_fgd1_rhc = ("1./3000.","weight_corr_total","ldm_expectedEvents",mass_condition,str(pot_data_fgd1_rhc/1.8e+21))
                     sigSample.weights_fgd2_rhc = ("1./3000.","weight_corr_total","ldm_expectedEvents",mass_condition,str(pot_data_fgd2_rhc/1.8e+21))
-
+                    sigSample.weights_p0d_w_fhc = ("1./3000.","ldm_expectedEvents",mass_condition,str(pot_data_p0d_w_fhc/1.8e+21))
+                    sigSample.weights_p0d_a_fhc = ("1./3000.","ldm_expectedEvents",mass_condition,str(pot_data_p0d_a_fhc/1.8e+21))
+                    sigSample.weights_p0d_w_rhc = ("1./3000.","ldm_expectedEvents",mass_condition,str(pot_data_p0d_w_rhc/1.8e+21))
+                    sigSample.weights_p0d_a_rhc = ("1./3000.","ldm_expectedEvents",mass_condition,str(pot_data_p0d_a_rhc/1.8e+21))
 else:
     workFile = ["data/"+configMgr.analysisName+".root"]
     if myFitType==FitType.Exclusion:
@@ -351,25 +441,33 @@ else:
             sam.setFileList(workFile)
 
 
+
 #--------------------
 # Dictionnary of cuts for Tree->hist
 #--------------------
 configMgr.cutsDict["SR1_FGD1_FHC"] = "accum_level>14 && weight_corr_total>=0"
-configMgr.cutsDict["VR1_FGD1_FHC"] = "accum_level==14 && weight_corr_total>=0" 
-configMgr.cutsDict["VR2_FGD1_FHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0" 
+configMgr.cutsDict["VR1_FGD1_FHC"] = "accum_level==14 && weight_corr_total>=0"
+configMgr.cutsDict["VR2_FGD1_FHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0"
+configMgr.cutsDict["SR1_P0D_W_FHC"] = "accum_level>13"
+configMgr.cutsDict["VR1_P0D_W_FHC"] = "accum_level==13"
 #
 configMgr.cutsDict["SR1_FGD2_FHC"] = "accum_level>14 && weight_corr_total>=0"
-configMgr.cutsDict["VR1_FGD2_FHC"] = "accum_level==14 && weight_corr_total>=0" 
-configMgr.cutsDict["VR2_FGD2_FHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0" 
+configMgr.cutsDict["VR1_FGD2_FHC"] = "accum_level==14 && weight_corr_total>=0"
+configMgr.cutsDict["VR2_FGD2_FHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0"
+configMgr.cutsDict["SR1_P0D_A_FHC"] = "accum_level>13"
+configMgr.cutsDict["VR1_P0D_A_FHC"] = "accum_level==13"
 #RHC
 configMgr.cutsDict["SR1_FGD1_RHC"] = "accum_level>14 && weight_corr_total>=0"
-configMgr.cutsDict["VR1_FGD1_RHC"] = "accum_level==14 && weight_corr_total>=0" 
-configMgr.cutsDict["VR2_FGD1_RHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0" 
+configMgr.cutsDict["VR1_FGD1_RHC"] = "accum_level==14 && weight_corr_total>=0"
+configMgr.cutsDict["VR2_FGD1_RHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0"
+configMgr.cutsDict["SR1_P0D_W_RHC"] = "accum_level>13"
+configMgr.cutsDict["VR1_P0D_W_RHC"] = "accum_level==13"
 #
 configMgr.cutsDict["SR1_FGD2_RHC"] = "accum_level>14 && weight_corr_total>=0"
-configMgr.cutsDict["VR1_FGD2_RHC"] = "accum_level==14 && weight_corr_total>=0" 
-configMgr.cutsDict["VR2_FGD2_RHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0" 
-
+configMgr.cutsDict["VR1_FGD2_RHC"] = "accum_level==14 && weight_corr_total>=0"
+configMgr.cutsDict["VR2_FGD2_RHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0"
+configMgr.cutsDict["SR1_P0D_A_RHC"] = "accum_level>13"
+configMgr.cutsDict["VR1_P0D_A_RHC"] = "accum_level==13"
 #--------------------
 # List of systematics
 #--------------------
@@ -387,18 +485,18 @@ configMgr.nomName = ""
 if myFitType==FitType.Background:
     bkt = configMgr.addFitConfig("BkgOnly")
     if useStat:
-        bkt.statErrThreshold=0.005 
+        bkt.statErrThreshold=0.005
     else:
         bkt.statErrThreshold=None
     bkt.addSamples([topSample,wzSample,bgSample,dataSample])
-    
+
 #************
 #Exclusion fit
 #************
 elif myFitType==FitType.Exclusion:
     bkt = configMgr.addFitConfig("SPlusB")
     if useStat:
-        bkt.statErrThreshold=0.005 
+        bkt.statErrThreshold=0.005
     else:
         bkt.statErrThreshold=None
     bkt.addSamples([topSample,wzSample,bgSample,dataSample,sigSample])
@@ -407,9 +505,6 @@ elif myFitType==FitType.Exclusion:
     # Systematics to be applied globally within this topLevel
     #bkt.getSample("Top").addSystematic(topKtScale)
     #bkt.getSample("WZ").addSystematic(wzKtScale)
-    #bkt.getChannelByName("obs_x_SR1_FGD1_FHC_selelec_mom").getSample("nuEleElastic").addSystematic(ucb)
-    #print(bkt.channels)
-    #raw_input("Press Enter to continue.")
 
 
 #-----------------------------
@@ -421,7 +516,7 @@ meas.addPOI("mu_SIG")
 #meas.addParamSetting("mu_BG",True,1)
 #meas.addParamSetting("Lumi",True,1)
 
-    
+
 #-------------------------------------------------
 # Constraining regions - statistically independent
 #-------------------------------------------------
@@ -438,218 +533,86 @@ mm2J_fgd1_rhc.useOverflowBin=True
 mm2J_fgd2_rhc = bkt.addChannel("selelec_mom",["SR1_FGD2_RHC"],Nbins,0.,1200.)
 mm2J_fgd2_rhc.useOverflowBin=True
 
+mm2J_p0d_w_fhc = bkt.addChannel("p0d_selelecshower_mom",["SR1_P0D_W_FHC"],Nbins,0.,1200.)
+mm2J_p0d_w_fhc.useOverflowBin=True
+
+mm2J_p0d_a_fhc = bkt.addChannel("p0d_selelecshower_mom",["SR1_P0D_A_FHC"],Nbins,0.,1200.)
+mm2J_p0d_a_fhc.useOverflowBin=True
+
+mm2J_p0d_w_rhc = bkt.addChannel("p0d_selelecshower_mom",["SR1_P0D_W_RHC"],Nbins,0.,1200.)
+mm2J_p0d_w_rhc.useOverflowBin=True
+
+mm2J_p0d_a_rhc = bkt.addChannel("p0d_selelecshower_mom",["SR1_P0D_A_RHC"],Nbins,0.,1200.)
+mm2J_p0d_a_rhc.useOverflowBin=True
+
 #--------------------------------------------------------------
 # Validation regions - not necessarily statistically independent
 #--------------------------------------------------------------
 
 if doValidation:
-    
+
     costheta1 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD1_FHC"],10,0.,1.)
     costheta1.useOverflowBin=True
     #costheta1.addSystematic(jes)
-    
+
     costheta2 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD2_FHC"],10,0.,1.)
     costheta2.useOverflowBin=True
-    
+
     costheta3 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD1_RHC"],10,0.,1.)
     costheta3.useOverflowBin=True
-    
+
     costheta4 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD2_RHC"],10,0.,1.)
     costheta4.useOverflowBin=True
-    
+
+    costheta5 = bkt.addChannel("p0d_selelecshower_costhetabeam",["VR1_P0D_W_FHC"],10,0.,1.)
+    costheta5.useOverflowBin=True
+    #costheta1.addSystematic(jes)
+
+    costheta6 = bkt.addChannel("p0d_selelecshower_costhetabeam",["VR1_P0D_A_FHC"],10,0.,1.)
+    costheta6.useOverflowBin=True
+
+    costheta7 = bkt.addChannel("p0d_selelecshower_costhetabeam",["VR1_P0D_W_RHC"],10,0.,1.)
+    costheta7.useOverflowBin=True
+
+    costheta8 = bkt.addChannel("p0d_selelecshower_costhetabeam",["VR1_P0D_A_RHC"],10,0.,1.)
+    costheta8.useOverflowBin=True
+
     emom1 = bkt.addChannel("selelec_mom",["VR1_FGD1_FHC"],20,0.,2000.)
     emom1.useOverflowBin=True
-    
+
     emom2 = bkt.addChannel("selelec_mom",["VR1_FGD2_FHC"],20,0.,2000.)
     emom2.useOverflowBin=True
-    
+
     emom3 = bkt.addChannel("selelec_mom",["VR1_FGD1_RHC"],20,0.,2000.)
     emom3.useOverflowBin=True
-    
+
     emom4 = bkt.addChannel("selelec_mom",["VR1_FGD2_RHC"],20,0.,2000.)
     emom4.useOverflowBin=True
+
+    emom5 = bkt.addChannel("p0d_selelecshower_mom",["VR1_P0D_W_FHC"],20,0.,2000.)
+    emom5.useOverflowBin=True
+
+    emom6 = bkt.addChannel("p0d_selelecshower_mom",["VR1_P0D_A_FHC"],20,0.,2000.)
+    emom6.useOverflowBin=True
+
+    emom7 = bkt.addChannel("p0d_selelecshower_mom",["VR1_P0D_W_RHC"],20,0.,2000.)
+    emom7.useOverflowBin=True
+
+    emom8 = bkt.addChannel("p0d_selelecshower_mom",["VR1_P0D_A_RHC"],20,0.,2000.)
+    emom8.useOverflowBin=True
 
     #costheta2 = bkt.addChannel("selelec_costheta_ldm",["VR2_FGD1_FHC"],10,0.9,1.)
     #costheta2.useOverflowBin=True
 
     #bkt.setValidationChannels([costheta1,emom2,costheta2])
-   
+
 
 if myFitType==FitType.Background:
-     bkt.setBkgConstrainChannels([mm2J_fgd1_fhc,mm2J_fgd2_fhc,mm2J_fgd1_rhc,mm2J_fgd2_rhc])
+     bkt.setBkgConstrainChannels([mm2J_fgd1_fhc,mm2J_fgd2_fhc,mm2J_fgd1_rhc,mm2J_fgd2_rhc,mm2J_p0d_w_fhc,mm2J_p0d_a_fhc,mm2J_p0d_w_rhc,mm2J_p0d_a_rhc])
      if doValidation:
          bkt.setValidationChannels([costheta1,emom2,costheta2])
 elif myFitType==FitType.Exclusion:
-     bkt.setSignalChannels([mm2J_fgd1_fhc,mm2J_fgd2_fhc,mm2J_fgd1_rhc,mm2J_fgd2_rhc])
-     #bkt.setValidationChannels([mm2J_fgd2_fhc])
-     
-     #----------------------------------------------
-     #Systematics
-     #ucb_fgd1_fhc = Systematic("ucb_fgd1", configMgr.weights, 1.100001,0.899999, "user","userOverallSys")
-     #ucb_fgd1_rhc = Systematic("ucb_fgd1", configMgr.weights, 1.200001,0.799999, "user","userOverallSys")
-     #ucb_fgd2_fhc = Systematic("ucb_fgd2", configMgr.weights, 1.100001,0.899999, "user","userOverallSys")
-     #ucb_fgd2_rhc = Systematic("ucb_fgd2", configMgr.weights, 1.200001,0.799999, "user","userOverallSys")
-     ##ucs = Systematic("ucs", configMgr.weights, 1.000001,0.999999, "user","userOverallSys")
-     #bkt.getChannelByName("selelec_mom_SR1_FGD1_FHC").getSample("nuEleElastic").addSystematic(ucb_fgd1_fhc)
-     #bkt.getChannelByName("selelec_mom_SR1_FGD1_RHC").getSample("nuEleElastic").addSystematic(ucb_fgd1_fhc)
-     #bkt.getChannelByName("selelec_mom_SR1_FGD2_FHC").getSample("nuEleElastic").addSystematic(ucb_fgd2_fhc)
-     #bkt.getChannelByName("selelec_mom_SR1_FGD2_RHC").getSample("nuEleElastic").addSystematic(ucb_fgd2_fhc)
-     
-     if fluxSyst:
-         RelError_flux_nu = 0.10
-         RelError_flux_ldm = 0.20
-         nu_flux_syst = Systematic("nu_flux_syst", configMgr.weights, 1.+RelError_flux_nu,1.-RelError_flux_nu, "user","overallNormSys")
-         ldm_flux_syst = Systematic("ldm_flux_syst", configMgr.weights, 1.+RelError_flux_ldm,1.-RelError_flux_ldm, "user","overallNormSys")
-         #LDM
-         bkt.getChannelByName("selelec_mom_SR1_FGD1_FHC").getSample("LDM020").addSystematic(ldm_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD1_RHC").getSample("LDM020").addSystematic(ldm_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD2_FHC").getSample("LDM020").addSystematic(ldm_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD2_RHC").getSample("LDM020").addSystematic(ldm_flux_syst)
-         #nuEleElastic
-         bkt.getChannelByName("selelec_mom_SR1_FGD1_FHC").getSample("nuEleElastic").addSystematic(nu_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD1_RHC").getSample("nuEleElastic").addSystematic(nu_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD2_FHC").getSample("nuEleElastic").addSystematic(nu_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD2_RHC").getSample("nuEleElastic").addSystematic(nu_flux_syst)
-         #otherBG
-         bkt.getChannelByName("selelec_mom_SR1_FGD1_FHC").getSample("otherBG").addSystematic(nu_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD1_RHC").getSample("otherBG").addSystematic(nu_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD2_FHC").getSample("otherBG").addSystematic(nu_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD2_RHC").getSample("otherBG").addSystematic(nu_flux_syst)
-         #ccnue
-         bkt.getChannelByName("selelec_mom_SR1_FGD1_FHC").getSample("ccnue").addSystematic(nu_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD1_RHC").getSample("ccnue").addSystematic(nu_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD2_FHC").getSample("ccnue").addSystematic(nu_flux_syst)
-         bkt.getChannelByName("selelec_mom_SR1_FGD2_RHC").getSample("ccnue").addSystematic(nu_flux_syst)
-         
-         
-     if detSyst:
-         #LDM
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","tpc_angres_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","tpc_angres_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","tpc_angres_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","tpc_angres_fgd2",ldmMv)
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","ecal_emscale_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","ecal_emscale_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","ecal_emscale_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","ecal_emscale_fgd2",ldmMv)
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","ecal_pid_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","ecal_pid_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","ecal_pid_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","ecal_pid_fgd2",ldmMv)
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","tpc_ecal_matcheff_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","tpc_ecal_matcheff_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","tpc_ecal_matcheff_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","tpc_ecal_matcheff_fgd2",ldmMv)
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","tpcpid_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","tpcpid_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","tpcpid_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","tpcpid_fgd2",ldmMv)
-         #
-         #nuEleElastic
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","tpcpid_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","tpcpid_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","ecal_emresol_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","ecal_emresol_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","ecal_emresol_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","ecal_emresol_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","ecal_emscale_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","ecal_emscale_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","ecal_emscale_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","ecal_emscale_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","tpc_ecal_matcheff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","tpc_ecal_matcheff_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","tpc_angres_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","tpc_angres_fgd2")
-
-         #otherBG
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpcpid_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpcpid_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpc_ecal_matcheff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpc_ecal_matcheff_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpc_angres_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpc_angres_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","bfield_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","bfield_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","bfield_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","bfield_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","momresol_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","momresol_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","momresol_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","momresol_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpctrackeff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpctrackeff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpctrackeff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpctrackeff_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","ecal_pid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","ecal_pid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","ecal_pid_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","ecal_pid_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","nueoofv_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","nueoofv_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","nueoofv_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","nueoofv_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","va_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","va_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","va_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","va_fgd2")
-         
-         #ccnue
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpcpid_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpcpid_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpctrackeff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpctrackeff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpctrackeff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpctrackeff_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpc_ecal_matcheff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpc_ecal_matcheff_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpc_angres_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpc_angres_fgd2")
-         #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","va_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","va_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","va_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","va_fgd2")
-       
-         #print(bkt.channels[1].name)
-         #raw_input("Press Enter to continue.")
-
+     bkt.setSignalChannels([mm2J_fgd1_fhc,mm2J_fgd2_fhc,mm2J_fgd1_rhc,mm2J_fgd2_rhc,mm2J_p0d_w_fhc,mm2J_p0d_a_fhc,mm2J_p0d_w_rhc,mm2J_p0d_a_rhc])
      if doValidation:
          bkt.setValidationChannels([costheta1,emom2,costheta2])
 
@@ -678,7 +641,7 @@ bkt.errorLineColor = kBlue-5
 #emom.ATLASLabelText = "Work in progress"
 
 
-   
+
 
 
 #**************
@@ -687,7 +650,7 @@ bkt.errorLineColor = kBlue-5
 
 if myFitType==FitType.Discovery:
     discovery = configMgr.addFitConfigClone(bkt,"Discovery")
-    
+
     # s1l2jT = signal region/channel
     #ssChannel = discovery.addChannel("cuts",["SS"],srNBins,srBinLow,srBinHigh)
     #ssChannel.addSystematic(jes)
@@ -695,9 +658,9 @@ if myFitType==FitType.Discovery:
     #discovery.setSignalChannels([ssChannel])
 
 
-	
-	
-	
+
+
+
 # Create TLegend (AK: TCanvas is needed for that, but it gets deleted afterwards)
 c = TCanvas()
 compFillStyle = 1001 # see ROOT for Fill styles
@@ -707,38 +670,38 @@ leg.SetFillColor(0)
 leg.SetBorderSize(0)
 #
 entry = TLegendEntry()
-entry = leg.AddEntry("","DATA","pl") 
+entry = leg.AddEntry("","DATA","pl")
 entry.SetMarkerColor(bkt.dataColor)
 entry.SetMarkerStyle(20)
 #
-entry = leg.AddEntry("","Total pdf","lf") 
+entry = leg.AddEntry("","Total pdf","lf")
 entry.SetLineColor(bkt.totalPdfColor)
 entry.SetLineWidth(2)
 entry.SetFillColor(bkt.errorFillColor)
 entry.SetFillStyle(bkt.errorFillStyle)
 #
-entry = leg.AddEntry("",topSample.name,"lf") 
+entry = leg.AddEntry("",topSample.name,"lf")
 entry.SetLineColor(topSample.color)
 entry.SetFillColor(topSample.color)
 entry.SetFillStyle(compFillStyle)
 #
-entry = leg.AddEntry("",wzSample.name,"lf") 
+entry = leg.AddEntry("",wzSample.name,"lf")
 entry.SetLineColor(wzSample.color)
 entry.SetFillColor(wzSample.color)
 entry.SetFillStyle(compFillStyle)
 #
-#entry = leg.AddEntry("","multijets (data estimate)","lf") 
+#entry = leg.AddEntry("","multijets (data estimate)","lf")
 #entry.SetLineColor(qcdSample.color)
 #entry.SetFillColor(qcdSample.color)
 #entry.SetFillStyle(compFillStyle)
 #
-entry = leg.AddEntry("",bgSample.name,"lf") 
+entry = leg.AddEntry("",bgSample.name,"lf")
 entry.SetLineColor(bgSample.color)
 entry.SetFillColor(bgSample.color)
 entry.SetFillStyle(compFillStyle)
 #
 #if myFitType==FitType.Exclusion:
-#    entry = leg.AddEntry("","signal","lf") 
+#    entry = leg.AddEntry("","signal","lf")
 #    entry.SetLineColor(kPink)
 #    entry.SetFillColor(kPink)
 #    entry.SetFillStyle(compFillStyle)

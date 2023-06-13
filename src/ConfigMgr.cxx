@@ -35,7 +35,172 @@
 
 using namespace std;
 
+double GetLDMSyst(TString syst_name, const char fgd[], double _ldmMv){
+    
+    if(_ldmMv<0.0048 || _ldmMv>0.546){
+        std::cout<<"GetLDMSyst: Dark photon mass is out of range! ldmMv= "<<_ldmMv<<std::endl;
+        getchar();
+        return 0.0001;
+    }
+    
+    TString dir("./sys/");
+    TString mysyst("");
+    if(syst_name.Contains("tpc_angres"))mysyst="tpc_angres";
+    if(syst_name.Contains("ecal_emscale"))mysyst="ecal_emscale";
+    if(syst_name.Contains("ecal_pid"))mysyst="ecal_pid";
+    if(syst_name.Contains("tpc_ecal_matcheff"))mysyst="tpc_ecal_matcheff";
+    if(syst_name.Contains("tpcpid"))mysyst="tpcpid";
+    
+    TFile sfile((dir+mysyst+"_syst.root").Data());
+    TGraph* gr;
+    sfile.GetObject(fgd,gr);
+    if(!gr){
+        std::cout<<"GetLDMSyst: Can't get syst TGrath!"<<std::endl;
+        getchar();
+        return 0.0001;
+    }
+    double syst = gr->Eval(_ldmMv);
+    std::cout<<syst_name<<"  Mv= "<<_ldmMv<<"  syst= "<<syst<<std::endl;
+    //getchar();
+    return syst;
+}
 
+//_______________________________________________________________________________________
+double ConfigMgr::Get_LDM_selection_DetSyst(const char _chname[],const char _sname[],const char _syst_name[], double _ldmMv){
+    TString chname(_chname);
+    TString sname(_sname);
+    TString syst_name(_syst_name);
+    
+    if(!chname.Contains("selelec_mom_SR1"))return 0.00001;
+    
+    //-LDM--------------
+    if(sname.Contains("LDM") && syst_name.Contains("tpc_angres") && chname.Contains("FGD1_FHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("tpc_angres") && chname.Contains("FGD1_RHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("tpc_angres") && chname.Contains("FGD2_FHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("tpc_angres") && chname.Contains("FGD2_RHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+    //---------------
+    if(sname.Contains("LDM") && syst_name.Contains("ecal_emscale") && chname.Contains("FGD1_FHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("ecal_emscale") && chname.Contains("FGD1_RHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("ecal_emscale") && chname.Contains("FGD2_FHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("ecal_emscale") && chname.Contains("FGD2_RHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+    //---------------
+    if(sname.Contains("LDM") && syst_name.Contains("ecal_pid") && chname.Contains("FGD1_FHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("ecal_pid") && chname.Contains("FGD1_RHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("ecal_pid") && chname.Contains("FGD2_FHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("ecal_pid") && chname.Contains("FGD2_RHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+    //---------------
+    if(sname.Contains("LDM") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD1_FHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD1_RHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD2_FHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD2_RHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+    //---------------
+    if(sname.Contains("LDM") && syst_name.Contains("tpcpid") && chname.Contains("FGD1_FHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("tpcpid") && chname.Contains("FGD1_RHC"))return GetLDMSyst(syst_name,"fgd1_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("tpcpid") && chname.Contains("FGD2_FHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+    if(sname.Contains("LDM") && syst_name.Contains("tpcpid") && chname.Contains("FGD2_RHC"))return GetLDMSyst(syst_name,"fgd2_ldm",_ldmMv);
+
+    
+    //-nuEleElastic--------------
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpcpid") && chname.Contains("FGD1_FHC"))return 0.0157479;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpcpid") && chname.Contains("FGD1_RHC"))return 0.00929343;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpcpid") && chname.Contains("FGD2_FHC"))return 0.0128359;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpcpid") && chname.Contains("FGD2_RHC"))return 0.0228336;
+    //---------------
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("ecal_emresol") && chname.Contains("FGD1_FHC"))return 0.0001;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("ecal_emresol") && chname.Contains("FGD1_RHC"))return 0.0001;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("ecal_emresol") && chname.Contains("FGD2_FHC"))return 0.0138563;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("ecal_emresol") && chname.Contains("FGD2_RHC"))return 0.0178152;
+    //---------------
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("ecal_emscale") && chname.Contains("FGD1_FHC"))return 0.0001;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("ecal_emscale") && chname.Contains("FGD1_RHC"))return 0.0001;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("ecal_emscale") && chname.Contains("FGD2_FHC"))return 0.0172054;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("ecal_emscale") && chname.Contains("FGD2_RHC"))return 0.022138;
+    //---------------
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD1_FHC"))return 0.00555691;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD1_RHC"))return 0.0138408;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD2_FHC"))return 0.00459048;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD2_RHC"))return 0.00879487;
+    //---------------
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpc_angres") && chname.Contains("FGD1_FHC"))return 0.0208606;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpc_angres") && chname.Contains("FGD1_RHC"))return 0.0268472;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpc_angres") && chname.Contains("FGD2_FHC"))return 0.0346404;
+    if(sname.Contains("nuEleElastic") && syst_name.Contains("tpc_angres") && chname.Contains("FGD2_RHC"))return 0.0476839;
+
+    //-otherBG--------------
+    if(sname.Contains("otherBG") && syst_name.Contains("tpcpid") && chname.Contains("FGD1_FHC"))return 0.0711925;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpcpid") && chname.Contains("FGD1_RHC"))return 0.174003;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpcpid") && chname.Contains("FGD2_FHC"))return 0.0305135;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpcpid") && chname.Contains("FGD2_RHC"))return 0.0869001;
+    //---------------
+    if(sname.Contains("otherBG") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD1_FHC"))return 0.001;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD1_RHC"))return 0.0103068;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD2_FHC"))return 0.0106387;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD2_RHC"))return 0.0154885;
+    //---------------
+    if(sname.Contains("otherBG") && syst_name.Contains("tpc_angres") && chname.Contains("FGD1_FHC"))return 0.0518371;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpc_angres") && chname.Contains("FGD1_RHC"))return 0.205498;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpc_angres") && chname.Contains("FGD2_FHC"))return 0.0644732;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpc_angres") && chname.Contains("FGD2_RHC"))return 0.0460633;
+    //---------------
+    if(sname.Contains("otherBG") && syst_name.Contains("bfield") && chname.Contains("FGD1_FHC"))return 0.0347655;
+    if(sname.Contains("otherBG") && syst_name.Contains("bfield") && chname.Contains("FGD1_RHC"))return 0.001;
+    if(sname.Contains("otherBG") && syst_name.Contains("bfield") && chname.Contains("FGD2_FHC"))return 0.0262661;
+    if(sname.Contains("otherBG") && syst_name.Contains("bfield") && chname.Contains("FGD2_RHC"))return 0.001;
+    //---------------
+    if(sname.Contains("otherBG") && syst_name.Contains("momresol") && chname.Contains("FGD1_FHC"))return 0.0419735;
+    if(sname.Contains("otherBG") && syst_name.Contains("momresol") && chname.Contains("FGD1_RHC"))return 0.161205;
+    if(sname.Contains("otherBG") && syst_name.Contains("momresol") && chname.Contains("FGD2_FHC"))return 0.0408196;
+    if(sname.Contains("otherBG") && syst_name.Contains("momresol") && chname.Contains("FGD2_RHC"))return 0.001;
+    //---------------
+    if(sname.Contains("otherBG") && syst_name.Contains("tpctrackeff") && chname.Contains("FGD1_FHC"))return 0.018851;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpctrackeff") && chname.Contains("FGD1_RHC"))return 0.001;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpctrackeff") && chname.Contains("FGD2_FHC"))return 0.00271012;
+    if(sname.Contains("otherBG") && syst_name.Contains("tpctrackeff") && chname.Contains("FGD2_RHC"))return 0.001;
+    //---------------
+    if(sname.Contains("otherBG") && syst_name.Contains("ecal_pid") && chname.Contains("FGD1_FHC"))return 0.001;
+    if(sname.Contains("otherBG") && syst_name.Contains("ecal_pid") && chname.Contains("FGD1_RHC"))return 0.00475097;
+    if(sname.Contains("otherBG") && syst_name.Contains("ecal_pid") && chname.Contains("FGD2_FHC"))return 0.0246741;
+    if(sname.Contains("otherBG") && syst_name.Contains("ecal_pid") && chname.Contains("FGD2_RHC"))return 0.0329695;
+    //---------------
+    if(sname.Contains("otherBG") && syst_name.Contains("nueoofv") && chname.Contains("FGD1_FHC"))return 0.163148;
+    if(sname.Contains("otherBG") && syst_name.Contains("nueoofv") && chname.Contains("FGD1_RHC"))return 0.4354;
+    if(sname.Contains("otherBG") && syst_name.Contains("nueoofv") && chname.Contains("FGD2_FHC"))return 0.119302;
+    if(sname.Contains("otherBG") && syst_name.Contains("nueoofv") && chname.Contains("FGD2_RHC"))return 0.291918;
+    //---------------
+    if(sname.Contains("otherBG") && syst_name.Contains("va") && chname.Contains("FGD1_FHC"))return 0.0208273;
+    if(sname.Contains("otherBG") && syst_name.Contains("va") && chname.Contains("FGD1_RHC"))return 0.001;
+    if(sname.Contains("otherBG") && syst_name.Contains("va") && chname.Contains("FGD2_FHC"))return 0.0657979;
+    if(sname.Contains("otherBG") && syst_name.Contains("va") && chname.Contains("FGD2_RHC"))return 0.0305025;
+
+    //-ccnue--------------
+    if(sname.Contains("ccnue") && syst_name.Contains("tpcpid") && chname.Contains("FGD1_FHC"))return 0.0001;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpcpid") && chname.Contains("FGD1_RHC"))return 0.0001;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpcpid") && chname.Contains("FGD2_FHC"))return 0.107981;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpcpid") && chname.Contains("FGD2_RHC"))return 0.0001;
+    //---------------
+    if(sname.Contains("ccnue") && syst_name.Contains("tpctrackeff") && chname.Contains("FGD1_FHC"))return 0.00547659;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpctrackeff") && chname.Contains("FGD1_RHC"))return 0.0001;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpctrackeff") && chname.Contains("FGD2_FHC"))return 0.049303;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpctrackeff") && chname.Contains("FGD2_RHC"))return 0.0001;
+    //---------------
+    if(sname.Contains("ccnue") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD1_FHC"))return 0.0001;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD1_RHC"))return 0.0001;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD2_FHC"))return 0.014532;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpc_ecal_matcheff") && chname.Contains("FGD2_RHC"))return 0.0001;
+    //---------------
+    if(sname.Contains("ccnue") && syst_name.Contains("tpc_angres") && chname.Contains("FGD1_FHC"))return 0.139802;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpc_angres") && chname.Contains("FGD1_RHC"))return 0.0001;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpc_angres") && chname.Contains("FGD2_FHC"))return 0.257286;
+    if(sname.Contains("ccnue") && syst_name.Contains("tpc_angres") && chname.Contains("FGD2_RHC"))return 0.0001;
+    //---------------
+    if(sname.Contains("ccnue") && syst_name.Contains("va") && chname.Contains("FGD1_FHC"))return 0.0680055;
+    if(sname.Contains("ccnue") && syst_name.Contains("va") && chname.Contains("FGD1_RHC"))return 0.0001;
+    if(sname.Contains("ccnue") && syst_name.Contains("va") && chname.Contains("FGD2_FHC"))return 0.125738;
+    if(sname.Contains("ccnue") && syst_name.Contains("va") && chname.Contains("FGD2_RHC"))return 0.0001;
+
+    std::cout<<"ConfigMgr::Get_LDM_selection_DetSyst: Unknown systematic!!!!!"<<std::endl;    
+    return 0.001;
+}
 //_______________________________________________________________________________________
 ConfigMgr::ConfigMgr() : m_logger("ConfigMgrCPP") { 
     m_nToys = 1000;

@@ -85,6 +85,8 @@ class ConfigMgr {
 
         /// Get POT from file
         Float_t GetPOT(std::string file, bool dumpPOT = false){return FitUtils::GetPOT(file, dumpPOT);}
+        //detector syst
+        double Get_LDM_selection_DetSyst(const char chname[],const char sname[],const char syst_name[], double _ldmMv=0);
 
         //get/set methods
         void setNToys (const int& val) { m_nToys = val; }

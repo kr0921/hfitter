@@ -251,8 +251,8 @@ RooStats::HypoTestTool::AnalyzeResult( HypoTestInverterResult * r,
     TCanvas *c_sig = new TCanvas(c1Name); 
     c_sig->SetLogy(false);
 
-    //plot->Draw("CLb 2CL");  // plot all and Clb
-    plot->Draw("EXP");  // draw only the expected plot
+    plot->Draw("CLb 2CL");  // plot all and Clb
+    //SI plot->Draw("EXP");  // draw only the expected plot
 
     TPave *pave = (TPave*)c_sig->GetPrimitive("TPave");
     pave->SetLineColor(0);
