@@ -96,6 +96,7 @@ fluxSyst=True # flux syst
 #-------------------------------
 #configMgr.doHypoTest=False
 #configMgr.scanRange = (0.001, 0.009)
+configMgr.scanRange = (1.e-9, 5.e-5)
 configMgr.nTOYs=100
 configMgr.calculatorType=2 #2   # 2=asymptotic calculator, 0=frequentist calculator
 configMgr.testStatType=3     # 3=one-sided profile likelihood test statistic (LHC default)
@@ -106,7 +107,7 @@ configMgr.nPoints=20
 #--------------------------------
 # Now we start to build the model
 #--------------------------------
-ldmMv = "0.09" #configMgr.userArg
+ldmMv = "0.015" #configMgr.userArg
 # First define HistFactory attributes
 configMgr.analysisName = "LDM2FGD_ana"+ldmMv
 
@@ -278,7 +279,7 @@ if myFitType==FitType.Exclusion:
          sigSample = Sample(sig,kPink)
          #sigSample.setNormByTheory()
          sigSample.setStatConfig(useStat)
-         sigSample.setNormFactor("mu_SIG",1.e-7,1.e-8,1000000.)                    
+         sigSample.setNormFactor("mu_SIG",1.e-7,1.e-11,1000000.)                    
          #sigSample.addSystematic(ucs)
 
 
@@ -355,19 +356,19 @@ else:
 # Dictionnary of cuts for Tree->hist
 #--------------------
 configMgr.cutsDict["SR1_FGD1_FHC"] = "accum_level>14 && weight_corr_total>=0"
-configMgr.cutsDict["VR1_FGD1_FHC"] = "accum_level==14 && weight_corr_total>=0" 
+configMgr.cutsDict["VR1_FGD1_FHC"] = "accum_level>14 && weight_corr_total>=0" 
 configMgr.cutsDict["VR2_FGD1_FHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0" 
 #
 configMgr.cutsDict["SR1_FGD2_FHC"] = "accum_level>14 && weight_corr_total>=0"
-configMgr.cutsDict["VR1_FGD2_FHC"] = "accum_level==14 && weight_corr_total>=0" 
+configMgr.cutsDict["VR1_FGD2_FHC"] = "accum_level>14 && weight_corr_total>=0" 
 configMgr.cutsDict["VR2_FGD2_FHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0" 
 #RHC
 configMgr.cutsDict["SR1_FGD1_RHC"] = "accum_level>14 && weight_corr_total>=0"
-configMgr.cutsDict["VR1_FGD1_RHC"] = "accum_level==14 && weight_corr_total>=0" 
+configMgr.cutsDict["VR1_FGD1_RHC"] = "accum_level>14 && weight_corr_total>=0" 
 configMgr.cutsDict["VR2_FGD1_RHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0" 
 #
 configMgr.cutsDict["SR1_FGD2_RHC"] = "accum_level>14 && weight_corr_total>=0"
-configMgr.cutsDict["VR1_FGD2_RHC"] = "accum_level==14 && weight_corr_total>=0" 
+configMgr.cutsDict["VR1_FGD2_RHC"] = "accum_level>14 && weight_corr_total>=0" 
 configMgr.cutsDict["VR2_FGD2_RHC"] = "accum_level==14 && selelec_costheta_ldm>0.9 && weight_corr_total>=0" 
 
 #--------------------
@@ -444,29 +445,29 @@ mm2J_fgd2_rhc.useOverflowBin=True
 
 if doValidation:
     
-    costheta1 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD1_FHC"],10,0.,1.)
+    costheta1 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD1_FHC"],10,0.99,1.)
     costheta1.useOverflowBin=True
     #costheta1.addSystematic(jes)
     
-    costheta2 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD2_FHC"],10,0.,1.)
+    costheta2 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD2_FHC"],10,0.99,1.)
     costheta2.useOverflowBin=True
     
-    costheta3 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD1_RHC"],10,0.,1.)
+    costheta3 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD1_RHC"],10,0.99,1.)
     costheta3.useOverflowBin=True
     
-    costheta4 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD2_RHC"],10,0.,1.)
+    costheta4 = bkt.addChannel("selelec_costheta_ldm",["VR1_FGD2_RHC"],10,0.99,1.)
     costheta4.useOverflowBin=True
     
-    emom1 = bkt.addChannel("selelec_mom",["VR1_FGD1_FHC"],20,0.,2000.)
+    emom1 = bkt.addChannel("selelec_mom",["VR1_FGD1_FHC"],10,0.,2000.)
     emom1.useOverflowBin=True
     
-    emom2 = bkt.addChannel("selelec_mom",["VR1_FGD2_FHC"],20,0.,2000.)
+    emom2 = bkt.addChannel("selelec_mom",["VR1_FGD2_FHC"],10,0.,2000.)
     emom2.useOverflowBin=True
     
-    emom3 = bkt.addChannel("selelec_mom",["VR1_FGD1_RHC"],20,0.,2000.)
+    emom3 = bkt.addChannel("selelec_mom",["VR1_FGD1_RHC"],10,0.,2000.)
     emom3.useOverflowBin=True
     
-    emom4 = bkt.addChannel("selelec_mom",["VR1_FGD2_RHC"],20,0.,2000.)
+    emom4 = bkt.addChannel("selelec_mom",["VR1_FGD2_RHC"],10,0.,2000.)
     emom4.useOverflowBin=True
 
     #costheta2 = bkt.addChannel("selelec_costheta_ldm",["VR2_FGD1_FHC"],10,0.9,1.)
@@ -498,8 +499,8 @@ elif myFitType==FitType.Exclusion:
      if fluxSyst:
          RelError_flux_nu = 0.10
          RelError_flux_ldm = 0.20
-         nu_flux_syst = Systematic("nu_flux_syst", configMgr.weights, 1.+RelError_flux_nu,1.-RelError_flux_nu, "user","overallNormSys")
-         ldm_flux_syst = Systematic("ldm_flux_syst", configMgr.weights, 1.+RelError_flux_ldm,1.-RelError_flux_ldm, "user","overallNormSys")
+         nu_flux_syst = Systematic("flux_syst", configMgr.weights, 1.+RelError_flux_nu,1.-RelError_flux_nu, "user","overallNormSys")
+         ldm_flux_syst = Systematic("flux_syst", configMgr.weights, 1.+RelError_flux_ldm,1.-RelError_flux_ldm, "user","overallNormSys")
          #LDM
          bkt.getChannelByName("selelec_mom_SR1_FGD1_FHC").getSample("LDM020").addSystematic(ldm_flux_syst)
          bkt.getChannelByName("selelec_mom_SR1_FGD1_RHC").getSample("LDM020").addSystematic(ldm_flux_syst)
@@ -524,128 +525,128 @@ elif myFitType==FitType.Exclusion:
          
      if detSyst:
          #LDM
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","tpc_angres_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","tpc_angres_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","tpc_angres_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","tpc_angres_fgd2",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","tpc_angres_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","tpc_angres_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","tpc_angres_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","tpc_angres_fgd",ldmMv)
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","ecal_emscale_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","ecal_emscale_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","ecal_emscale_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","ecal_emscale_fgd2",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","ecal_emscale_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","ecal_emscale_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","ecal_emscale_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","ecal_emscale_fgd",ldmMv)
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","ecal_pid_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","ecal_pid_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","ecal_pid_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","ecal_pid_fgd2",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","ecal_pid_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","ecal_pid_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","ecal_pid_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","ecal_pid_fgd",ldmMv)
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","tpc_ecal_matcheff_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","tpc_ecal_matcheff_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","tpc_ecal_matcheff_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","tpc_ecal_matcheff_fgd2",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","tpc_ecal_matcheff_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","tpc_ecal_matcheff_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","tpc_ecal_matcheff_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","tpc_ecal_matcheff_fgd",ldmMv)
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","tpcpid_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","tpcpid_fgd1",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","tpcpid_fgd2",ldmMv)
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","tpcpid_fgd2",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","LDM020","tpcpid_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","LDM020","tpcpid_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","LDM020","tpcpid_fgd",ldmMv)
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","LDM020","tpcpid_fgd",ldmMv)
          #
          #nuEleElastic
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","tpcpid_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","tpcpid_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","tpcpid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","tpcpid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","tpcpid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","tpcpid_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","ecal_emresol_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","ecal_emresol_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","ecal_emresol_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","ecal_emresol_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","ecal_emresol_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","ecal_emresol_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","ecal_emresol_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","ecal_emresol_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","ecal_emscale_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","ecal_emscale_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","ecal_emscale_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","ecal_emscale_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","ecal_emscale_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","ecal_emscale_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","ecal_emscale_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","ecal_emscale_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","tpc_ecal_matcheff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","tpc_ecal_matcheff_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","tpc_ecal_matcheff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","tpc_ecal_matcheff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","tpc_ecal_matcheff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","tpc_ecal_matcheff_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","tpc_angres_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","tpc_angres_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","nuEleElastic","tpc_angres_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","nuEleElastic","tpc_angres_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","nuEleElastic","tpc_angres_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","nuEleElastic","tpc_angres_fgd")
 
          #otherBG
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpcpid_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpcpid_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpcpid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpcpid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpcpid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpcpid_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpc_ecal_matcheff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpc_ecal_matcheff_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpc_ecal_matcheff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpc_ecal_matcheff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpc_ecal_matcheff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpc_ecal_matcheff_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpc_angres_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpc_angres_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpc_angres_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpc_angres_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpc_angres_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpc_angres_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","bfield_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","bfield_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","bfield_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","bfield_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","bfield_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","bfield_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","bfield_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","bfield_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","momresol_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","momresol_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","momresol_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","momresol_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","momresol_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","momresol_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","momresol_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","momresol_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpctrackeff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpctrackeff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpctrackeff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpctrackeff_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","tpctrackeff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","tpctrackeff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","tpctrackeff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","tpctrackeff_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","ecal_pid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","ecal_pid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","ecal_pid_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","ecal_pid_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","ecal_pid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","ecal_pid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","ecal_pid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","ecal_pid_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","nueoofv_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","nueoofv_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","nueoofv_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","nueoofv_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","nueoofv_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","nueoofv_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","nueoofv_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","nueoofv_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","va_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","va_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","va_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","va_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","otherBG","va_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","otherBG","va_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","otherBG","va_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","otherBG","va_fgd")
          
          #ccnue
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpcpid_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpcpid_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpcpid_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpcpid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpcpid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpcpid_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpcpid_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpctrackeff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpctrackeff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpctrackeff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpctrackeff_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpctrackeff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpctrackeff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpctrackeff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpctrackeff_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpc_ecal_matcheff_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpc_ecal_matcheff_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpc_ecal_matcheff_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpc_ecal_matcheff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpc_ecal_matcheff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpc_ecal_matcheff_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpc_ecal_matcheff_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpc_angres_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpc_angres_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpc_angres_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","tpc_angres_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","tpc_angres_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","tpc_angres_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","tpc_angres_fgd")
          #
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","va_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","va_fgd1")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","va_fgd2")
-         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","va_fgd2")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_FHC","ccnue","va_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD1_RHC","ccnue","va_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_FHC","ccnue","va_fgd")
+         addSystematic(bkt,"selelec_mom_SR1_FGD2_RHC","ccnue","va_fgd")
        
          #print(bkt.channels[1].name)
          #raw_input("Press Enter to continue.")

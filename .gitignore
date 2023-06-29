@@ -1,0 +1,14 @@
+*.bak
+.*
+!/.gitignore
+!/.gitlab-ci.yml
+*.log
+results/*
+samples/*
+data/*
+*.pyc
+include/*.h
+lib/libSusyFitter.so
+src/SusyFitter_Dict.C
+src/SusyFitter_Dict.h
+src/obj/
